@@ -19,16 +19,47 @@ add_compile_options(-W -Wall -fvisibility=hidden)
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 include_directories(.)
 
-# find_package(Qt6 REQUIRED COMPONENTS Core)
-
 include(GoogleTest)
 enable_testing()
+
+{% if cookiecutter.type == "regular" %}
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+)
+
+{% elif cookiecutter.type == "boost" %}
+find_package(Boost COMPONENTS thread program_options REQUIRED)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
 )
 
-# target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
+{% elif cookiecutter.type == "qt-gui" %}
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+qt_standard_project_setup()
+
+qt_add_executable(${PROJECT_NAME}
+    mainwindow.ui
+    mainwindow.cpp
+    main.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    WIN32_EXECUTABLE ON
+    MACOSX_BUNDLE ON
+)
+{% elif cookiecutter.type == "qt-cli" %}
+find_package(Qt6 REQUIRED COMPONENTS Core)
+qt_standard_project_setup()
+
+qt_add_executable(${PROJECT_NAME}
+    main.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core)
+{% endif %}
 
 # Google Tests
 add_executable(tests
