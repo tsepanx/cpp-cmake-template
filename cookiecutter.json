@@ -1,10 +1,13 @@
 {
   "project_name": "Project1",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('_', '-') }}",
+  "project_short_description": "Desc",
   "version": "0.1.0",
   "type": [
     "regular",
     "qt-gui",
     "qt-cli",
     "boost"
-  ]
+  ],
+  "add_rpm": true
 }

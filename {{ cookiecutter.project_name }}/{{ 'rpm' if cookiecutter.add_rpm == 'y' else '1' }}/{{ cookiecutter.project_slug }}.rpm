@@ -1,0 +1,51 @@
+Name: {{ cookiecutter.project_name }}
+Summary: {{ cookiecutter.project_short_description }}
+Version: {{ cookiecutter.version }}
+Release: 1
+License: Proprietary
+Source0: %{name}-%{version}.tar.zst
+
+BuildRequires: cmake
+{% if cookiecutter.type == "regular" %}
+{% elif cookiecutter.type == "boost" %}
+BuildRequires: boost-devel
+{% endif %}
+BuildRequires: pkgconfig(systemd)
+BuildRequires: pkgconfig(glib-2.0)
+BuildRequires: gtest-devel
+BuildRequires: gmock-devel
+
+%package tests
+Summary: Tests for the %{name} package
+Requires: %{name} = %{version}-%{release}
+
+%description tests
+%{summary}.
+
+%description
+%{summary}.
+
+%prep
+%autosetup
+
+%build
+%cmake -B build 
+cd build/
+%make_build
+
+%check
+export GTEST_COLOR=%[%{?_obs_build_project:1} ? 0 : 1]
+
+cd build/
+ctest --verbose
+
+%install
+cd build/
+%make_install
+
+%files tests
+/opt/tests/${name}-tests
+
+%files
+%{_bindir}/%{name}
+
