@@ -2,6 +2,7 @@
   "project_name": "Project1",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('_', '-') }}",
   "project_short_description": "Desc",
+  "package_name": "aaa",
   "version": "0.1.0",
   "type": [
     "regular",
