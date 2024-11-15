@@ -41,6 +41,7 @@ qt_standard_project_setup()
 
 qt_add_executable(${PROJECT_NAME}
     mainwindow.ui
+    mainwindow.h
     mainwindow.cpp
     main.cpp
 )
